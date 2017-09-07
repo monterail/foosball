@@ -10,7 +10,7 @@ class Team
   end
 
   def add_member(member)
-    # return if members.include? member
+    return if members.include? member
     @members << member
     notify_members if members.size == 4
   end
@@ -27,6 +27,6 @@ class Team
   private
 
   def notify_members
-    @members.map { |member| "@" + member }.join(", ")
+    @members.map { |member| "<@#{member}>" }.join(", ")
   end
 end
