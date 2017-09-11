@@ -12,21 +12,20 @@ class Team
   def add_member(member)
     return if members.include? member
     @members << member
-    notify_members if members.size == 4
+    members_notification if members.size == 4
   end
 
   def delete_member(member)
     @members.delete(member)
-    @members
   end
 
   def members_list
-    @members.join(", ")
+    @members.sort.join(", ")
   end
 
   private
 
-  def notify_members
-    @members.map { |member| "<@#{member}>" }.join(", ")
+  def members_notification
+    @members.sort.map { |member| "<@#{member}>" }.join(", ")
   end
 end
