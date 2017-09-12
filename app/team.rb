@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class Team
   attr_accessor :members
 
-  def initialize()
+  def initialize
     @members = []
   end
 

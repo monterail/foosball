@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Notifier
   class << self
     def new_game

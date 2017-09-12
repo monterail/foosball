@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 class SlackAuthorizer
-  UNAUTHORIZED_MESSAGE = "Ops! Looks like the application is not authorized! Please review the token configuration.".freeze
-  UNAUTHORIZED_RESPONSE = ["200", {"Content-Type" => "text"}, [UNAUTHORIZED_MESSAGE]]
+  UNAUTHORIZED_MESSAGE = "Ops! Looks like the application is not authorized! " \
+                         "Please review the token configuration."
+  UNAUTHORIZED_RESPONSE = ["200", { "Content-Type" => "text" }, [UNAUTHORIZED_MESSAGE]].freeze
 
   def initialize(app)
     @app = app
