@@ -11,6 +11,7 @@ use SlackAuthorizer
 team = Team.new
 
 post "/slack/foosball" do
+  return Notifier.help unless params["text"].to_s.strip.empty?
   team.create(params["user_name"])
   Notifier.new_game
   Notifier.team_status(team.members_list)
