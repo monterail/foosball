@@ -2,7 +2,7 @@
 
 require "httpclient"
 class SlackMessenger
-  SLACK_API = "https://hooks.slack.com/services/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"
+  SLACK_API = ENV["SLACK_API"]
 
   def self.deliver(message)
     new(message).deliver
