@@ -10,6 +10,7 @@ class Team
   end
 
   def add_member(member_id, member_name)
+    return if @members.size == 4
     @members[member_id] = member_name
     return NotificationBuilder.members_notification(member_ids) if members.size == 4
     NotificationBuilder.team_status(member_names)
