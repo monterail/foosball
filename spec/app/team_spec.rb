@@ -13,16 +13,82 @@ RSpec.describe Team do
   let(:member4_name) { "user_4" }
 
   describe "#create" do
-    let(:call_method) { team.create(member_id, member_name) }
-
-    it "calls NotificationBuilder class" do
-      expect(NotificationBuilder).to receive(:new_game).with([member_name])
-      call_method
+    let(:call_method) { team.create(member_id, member_name, members: members) }
+    let(:members) { [] }
+    let(:slack_users) do
+      {
+        member_name => member_id,
+        member2_name => member2_id,
+        member3_name => member3_id,
+        member4_name => member4_id,
+      }
     end
 
-    it "adds member to the team" do
-      call_method
-      expect(team.members).to eq(member_id => member_name)
+    before do
+      allow_any_instance_of(Slack).to receive(:fetch_users).and_return(slack_users)
+    end
+
+    context "when there are no additional players" do
+      it "calls NotificationBuilder class" do
+        expect(NotificationBuilder).to receive(:new_game).with([member_name])
+        call_method
+      end
+
+      it "adds member to the team" do
+        call_method
+        expect(team.members).to eq(member_id => member_name)
+      end
+    end
+
+    context "when there is one additional player" do
+      let(:members) { ["@#{member2_name}"] }
+      it "calls NotificationBuilder class" do
+        expect(NotificationBuilder).to receive(:new_game).with([member_name, member2_name])
+        call_method
+      end
+
+      it "adds members to the team" do
+        call_method
+        expect(team.members).to eq(member_id => member_name, member2_id => member2_name)
+      end
+    end
+
+    context "when there are two additional players" do
+      let(:members) { ["@#{member2_name}", "@#{member3_name}"] }
+      it "calls NotificationBuilder class" do
+        expect(NotificationBuilder).to receive(:new_game)
+          .with([member_name, member2_name, member3_name])
+        call_method
+      end
+
+      it "adds members to the team" do
+        call_method
+        expect(team.members).to eq(
+          member_id => member_name, member2_id => member2_name, member3_id => member3_name,
+        )
+      end
+    end
+
+    context "when additional member is not in the database or is invalid" do
+      let(:invalid_name) { "@invalid_name" }
+
+      context "when invalid member is first param" do
+        let(:members) { [invalid_name, "@#{member2_name}"] }
+
+        it "doesn't add invalid user to the team" do
+          call_method
+          expect(team.members).to eq(member_id => member_name, member2_id => member2_name)
+        end
+      end
+
+      context "when invalid member is second param" do
+        let(:members) { ["@#{member2_name}", invalid_name] }
+
+        it "doesn't add invalid user to the team" do
+          call_method
+          expect(team.members).to eq(member_id => member_name, member2_id => member2_name)
+        end
+      end
     end
 
     context "when a team already exists" do

@@ -3,9 +3,14 @@
 class Team
   attr_accessor :members
 
-  def create(member_id, member_name)
+  def create(founder_id, founder_name, members: [])
     @members = {}
-    @members[member_id] = member_name
+    @members[founder_id] = founder_name
+    members.each do |member_name|
+      member_name[0] = ""
+      member_id = slack_users[member_name]
+      @members[member_id] = member_name if member_id
+    end
     NotificationBuilder.new_game(member_names)
   end
 
@@ -29,5 +34,9 @@ class Team
 
   def member_ids
     @members.keys
+  end
+
+  def slack_users
+    @slack_users ||= Slack.fetch_users
   end
 end
