@@ -33,8 +33,13 @@ RSpec.describe NotificationBuilder do
   describe "#help" do
     it "returns correct help string" do
       result = NotificationBuilder.help
-      expect(result).to eq("`/foosball` start a game\n`/foosball @user1 @user2` "\
-        "start a game with friends\n`/+` join the game\n`/-` leave the game")
+      expect(result).to eq(
+        "`/foosball` start a game\n"\
+        "`/foosball @user1 @user2` start a game with friends\n"\
+        "`/+` join the game\n"\
+        "`/-` leave the game\n"\
+        "`/ping` ping again all team members (works only if team has 4 members)",
+      )
     end
   end
 end

@@ -41,3 +41,8 @@ post "/slack/-" do
   response = team.delete_member(params["user_id"])
   Slack.deliver(response)
 end
+
+post "/slack/ping" do
+  response = team.ping_message
+  Slack.deliver(response)
+end

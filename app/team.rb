@@ -3,6 +3,10 @@
 class Team
   attr_accessor :members
 
+  def initialize
+    @members = {}
+  end
+
   def create(founder_id, founder_name, members: [])
     @members = {}
     @members[founder_id] = founder_name
@@ -17,13 +21,17 @@ class Team
   def add_member(member_id, member_name)
     return if @members.size == 4
     @members[member_id] = member_name
-    return NotificationBuilder.members_notification(member_ids) if members.size == 4
-    NotificationBuilder.team_status(member_names)
+    ping_message || NotificationBuilder.team_status(member_names)
   end
 
   def delete_member(member_id)
     @members.delete(member_id)
     NotificationBuilder.team_status(member_names)
+  end
+
+  def ping_message
+    return nil unless @members.size == 4
+    NotificationBuilder.members_notification(member_ids)
   end
 
   private

@@ -34,7 +34,7 @@ class Slack
   private
 
   def msg_params(message)
-    { text: message }.merge(token_param)
+    { text: message.to_s }.merge(token_param)
   end
 
   def token_param

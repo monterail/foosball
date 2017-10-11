@@ -136,5 +136,22 @@ describe "AppController" do
       call_api
     end
   end
+
+  describe "POST 'slack/ping'" do
+    let(:call_api) do
+      allow_any_instance_of(Slack).to receive(:deliver).and_return(nil)
+      post "/slack/ping", user_id: user_id, user_name: user_name
+    end
+
+    it "gets ping message" do
+      expect_any_instance_of(Team).to receive(:ping_message)
+      call_api
+    end
+
+    it "Sends the message to slack" do
+      expect(Slack).to receive(:deliver)
+      call_api
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength

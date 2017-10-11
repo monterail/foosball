@@ -228,5 +228,51 @@ RSpec.describe Team do
       end
     end
   end
+
+  describe "#ping" do
+    let(:call_method) { team.ping_message }
+
+    before { team.create(member_id, member_name) }
+
+    context "when there is one team member" do
+      it "returns nil" do
+        expect(call_method).to eq(nil)
+      end
+    end
+
+    context "when there are two team members" do
+      before do
+        team.members[member2_id] = member2_name
+      end
+
+      it "returns nil" do
+        expect(call_method).to eq(nil)
+      end
+    end
+
+    context "when there are three team members" do
+      before do
+        team.members[member2_id] = member2_name
+        team.members[member3_id] = member3_name
+      end
+
+      it "returns nil" do
+        expect(call_method).to eq(nil)
+      end
+    end
+
+    context "when there are four team members" do
+      before do
+        team.members[member2_id] = member2_name
+        team.members[member3_id] = member3_name
+        team.members[member4_id] = member4_name
+      end
+
+      it "returns nil" do
+        expect(call_method)
+          .to eq("<@#{member_id}>, <@#{member2_id}>, <@#{member3_id}>, <@#{member4_id}> GO!")
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
